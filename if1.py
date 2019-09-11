@@ -19,7 +19,25 @@ def main():
     Эта функция вызывается автоматически при запуске скрипта в консоли
     В ней надо заменить pass на ваш код
     """
-    pass
+    user_age = abs(int(input('Введите ваш возраст : ')))
 
+    def suggestion(user_age):
+    
+        if user_age < 2:
+            return 'Вам еще рано куда-то отправляться!'
+        elif 2 <= user_age < 7:
+            return 'Пора ходить в садик'
+        elif 7 <= user_age < 18:
+            return 'Вам впору ходить в школу'
+        elif 18 <= user_age < 23:
+            return 'В этом возрасте желательно учиться в ВУЗе'
+        elif 23 <= user_age < 70:
+            return 'Взрослая жизнь в разгаре - надо ходить на работку'
+        else:
+            return 'Пора на пенсию!'
+    result = suggestion(user_age)
+    print(result) 
+ 
 if __name__ == "__main__":
     main()
+    

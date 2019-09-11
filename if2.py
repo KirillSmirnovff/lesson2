@@ -20,7 +20,23 @@ def main():
     Эта функция вызывается автоматически при запуске скрипта в консоли
     В ней надо заменить pass на ваш код
     """
-    pass
+    def string_compare(string_one, string_two):
+        if type(string_one) is not str or type(string_two) is not str:
+            return '0'
+        else:
+            if string_one == string_two:
+                return '1'
+            elif len(string_one) > len(string_two):
+                return '2'
+            elif string_two == 'learn':
+                return '3'
+            else:
+                return 'Этот случай не предусмотрен'
+    print(string_compare(1,'100'))
+    print(string_compare('1','100'))
+    print(string_compare('100','100'))
+    print(string_compare('1000','100'))
+    print(string_compare('1','learn'))
     
 if __name__ == "__main__":
     main()
