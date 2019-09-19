@@ -103,8 +103,9 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Preference
+# Preferences 
 discount.py
 test.py
+.vscode
 
 
