@@ -14,6 +14,10 @@
 """
 import logging
 
+import ephem
+
+from datetime import date
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
@@ -23,7 +27,7 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
 
 
 PROXY = {
-    'proxy_url': 'socks5://t1.learn.python.ru:1080',
+    'proxy_url': 'socks5://t3.learn.python.ru:1080',
     'urllib3_proxy_kwargs': {
         'username': 'learn', 
         'password': 'python'
@@ -32,9 +36,20 @@ PROXY = {
 
 
 def greet_user(bot, update):
-    text = 'Вызван /start'
+    text = 'Приветствую!'
     print(text)
     update.message.reply_text(text)
+
+def planet_position(bot, update):
+    current_date = date.today().strftime('%Y/%d/%m')
+    user_planet = update.message.text.split()[1]
+    planet = getattr(ephem, user_planet)
+    planet = planet(current_date)
+    planet_list = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn','Uran','Neptune', 'Pluto'] # Проверка правильности ввода, чтобы в else вывести ответ при неправильном вводе. 
+    if user_planet in planet_list:
+        update.message.reply_text(ephem.constellation(planet))
+    else:
+        update.message.reply_text('Где сегодня эта планета - мне неизвестно :(')
 
 
 def talk_to_me(bot, update):
@@ -44,10 +59,11 @@ def talk_to_me(bot, update):
  
 
 def main():
-    mybot = Updater("КЛЮЧ, КОТОРЫЙ НАМ ВЫДАЛ BotFather", request_kwargs=PROXY)
+    mybot = Updater('934801973:AAFR-ybwGVkb46UUZPJaYxv1jMNfpWK13tY', request_kwargs=PROXY)
     
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
+    dp.add_handler(CommandHandler("planet", planet_position))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     
     mybot.start_polling()

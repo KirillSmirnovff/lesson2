@@ -14,7 +14,20 @@ def ask_user():
     """
     Замените pass на ваш код
     """
-    pass
+    dictionary = {'Как дела?': 'Хорошо', 'Что делаешь?': 'Программирую', 'Как тебя зовут?': 'Просто программа'}
+    while True:
+        try:
+            user_say = input('\n')
+            if user_say in dictionary:
+                 print(dictionary[user_say])
+            elif user_say == 'Пока':
+                print('Ну пока')
+                break
+            else:
+                print('Не понимаю')
+        except KeyboardInterrupt:
+            print('Пока!')
+            break
     
 if __name__ == "__main__":
     ask_user()
