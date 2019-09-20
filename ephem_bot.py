@@ -24,7 +24,7 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='bot.log'
 )
-#git push test
+#git push test form desktop
 
 PROXY = {
     'proxy_url': 'socks5://t3.learn.python.ru:1080',
