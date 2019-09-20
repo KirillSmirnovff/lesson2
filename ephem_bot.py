@@ -4,7 +4,7 @@
 Использование библиотек: ephem
 
 * Установите модуль ephem
-* Добавьте в бота команду /planet, которая будет принимать на вход 
+* Добавьте в бота команду /planet,которая будет принимать на вход 
   название планеты на английском, например /planet Mars
 * В функции-обработчике команды из update.message.text получите 
   название планеты (подсказка: используйте .split())
@@ -24,7 +24,7 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='bot.log'
 )
-
+#git push test
 
 PROXY = {
     'proxy_url': 'socks5://t3.learn.python.ru:1080',
@@ -41,22 +41,15 @@ def greet_user(bot, update):
     update.message.reply_text(text)
 
 def planet_position(bot, update):
-    current_date = date.today()
-    string_current_date = (f'{current_date.year}/{current_date.day}/{current_date.month}')
+    current_date = date.today().strftime('%Y/%d/%m')
     user_planet = update.message.text.split()[1]
-    planet_list = {'Mercury': ephem.constellation(ephem.Mercury(string_current_date)),
-                'Venus': ephem.constellation(ephem.Venus(string_current_date)),
-                'Mars': ephem.constellation(ephem.Mars(string_current_date)),
-                'Saturn': ephem.constellation(ephem.Saturn(string_current_date)),
-                'Pluto': ephem.constellation(ephem.Pluto(string_current_date)),
-                'Jupiter': ephem.constellation(ephem.Jupiter(string_current_date)),
-                'Uranus': ephem.constellation(ephem.Uranus(string_current_date)),
-                'Neptune': ephem.constellation(ephem.Neptune(string_current_date)),
-                 }
+    planet = getattr(ephem, user_planet)
+    planet = planet(current_date)
+    planet_list = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn','Uran','Neptune', 'Pluto'] # Проверка правильности ввода, чтобы в else вывести ответ при неправильном вводе. 
     if user_planet in planet_list:
-        update.message.reply_text(planet_list[user_planet])
+        update.message.reply_text(ephem.constellation(planet))
     else:
-        update.message.reply_text('Где сейчас эта планета - мне неизвестно :(')
+        update.message.reply_text('Где сегодня эта планета - мне неизвестно :(')
 
 
 def talk_to_me(bot, update):
