@@ -14,6 +14,8 @@
 """
 import logging
 
+import random
+
 import ephem
 
 from datetime import datetime,date
@@ -33,6 +35,10 @@ PROXY = {
         'password': 'python'
     }
 }
+
+cities_list = ['Москва', 'Архангельск', 'Курск', 'Кострома']
+game_list = []
+uses_cities_list = []
 
 
 def greet_user(bot, update):
@@ -68,6 +74,39 @@ def next_full_moon (bot, update):
     user_date = datetime.strptime(user_date, '%Y%d%m').date()
     update.message.reply_text('Дата следующего полнолуния : {}'.format(ephem.next_full_moon(user_date)))
 
+def cities (bot, update):
+    user_city = update.message.text.split()[1].capitalize()
+
+    if user_city not in cities_list:
+        update.message.reply_text(f'Города "{user_city}" я не знаю или он уже был, попробуй другой город.')
+    else:
+        cities_list.remove(user_city)
+        answer_list = []
+        for city in cities_list:
+            if user_city[len(user_city) - 1].capitalize() == city[0]:
+                answer_list.append(city)
+        if answer_list == []:
+            update.message.reply_text(f'Больше городов на букву "{user_city[len(user_city) - 1].capitalize()}" я не знаю, ты победил!')    
+        else:
+            answer_city = random.choice(answer_list)
+            update.message.reply_text(f'"{answer_city}". Твоя очередь. Город на букву "{answer_city[len(answer_city) - 1]}"')
+            cities_list.remove(answer_city)
+        
+def calculator(bot,update):
+    user_request = update.message.text.replace(' ','')[5:]
+    print(user_request)
+    numbers = user_request.replace('+',' ').replace('-', ' ').replace('*', ' ').replace('/', ' ').split()
+    print(numbers)
+    if '+' in user_request:
+        update.message.reply_text(f'{int(numbers[0])+int(numbers[1])}')
+    elif '-' in user_request:
+        update.message.reply_text(f'{int(numbers[0])-int(numbers[1])}')
+    elif '*' in user_request:
+        update.message.reply_text(f'{int(numbers[0])*int(numbers[1])}')
+    elif '/' in user_request:
+        update.message.reply_text(f'{int(numbers[0])/int(numbers[1])}')
+    
+
  
 
 def main():
@@ -76,9 +115,11 @@ def main():
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("planet", planet_position))
-    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler("wordcount", wordcount))
     dp.add_handler(CommandHandler("nextfullmoon", next_full_moon))
+    dp.add_handler(CommandHandler("cities", cities))
+    dp.add_handler(CommandHandler("calc", calculator))
+    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
    
 
     mybot.start_polling()
